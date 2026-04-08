@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
+import { aiChat } from "@/lib/fyre-api";
 import { getSession } from "@/lib/admin-auth";
 
 // ─── AGENTS ───
@@ -417,25 +418,18 @@ export default function TimeIAPage() {
         content: m.content,
       }));
 
-      const res = await fetch("/api/ai/team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "chat",
-          agent: selectedAgent.key,
+      const res = await aiChat({
           agentSystemPrompt: selectedAgent.systemPrompt + CONVERSATION_RULES,
           messages: chatMessages,
           mode,
           clientContext: mode === "cliente" ? selectedClient : null,
           userName: session?.display_name || "usuário",
-        }),
       });
 
-      const data = await res.json();
       const agentReply: Message = {
         id: crypto.randomUUID(),
         role: "agent",
-        content: data.output || data.error || "Sem resposta",
+        content: res.output || "Sem resposta",
         timestamp: new Date().toISOString(),
       };
 

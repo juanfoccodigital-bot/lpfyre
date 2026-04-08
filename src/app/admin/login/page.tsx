@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authenticate, setSession } from "@/lib/admin-auth";
+import { loginAdmin } from "@/lib/fyre-api";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function AdminLoginPage() {
     }
 
     setSession(session);
+    try { await loginAdmin(username, password); } catch { /* JWT optional for now */ }
     router.push("/admin");
   }
 

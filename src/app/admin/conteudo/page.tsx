@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { aiContent } from "@/lib/fyre-api";
 import Link from "next/link";
 
 interface SlideData {
@@ -93,18 +94,13 @@ export default function ConteudoPage() {
   async function generateCalendar() {
     setGenerating(true);
     try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const data = await aiContent({
           action: "generate-calendar",
           weeks: parseInt(genWeeks),
           theme: genTheme,
           tone: genTone,
           frequency: genFreq,
-        }),
-      });
-      const data = await res.json();
+        });
       if (data.error) { alert("Erro: " + data.error); return; }
 
       const rawPosts = data.result?.posts;

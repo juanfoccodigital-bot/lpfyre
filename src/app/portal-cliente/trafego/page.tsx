@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { getMetaInsights } from "@/lib/fyre-api";
 import { getPortalSession } from "@/lib/portal-auth";
 import {
   ResponsiveContainer,
@@ -156,12 +157,7 @@ export default function TrafegoPage() {
     }
 
     try {
-      const res = await fetch("/api/meta", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ accountId, accessToken: token, dateRange: { since, until } }),
-      });
-      const data = await res.json();
+      const data = await getMetaInsights({ accountId, accessToken: token, dateRange: { since, until } });
       if (!data.error) {
         setTrafficData(data);
       }

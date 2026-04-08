@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { createLead } from "@/lib/supabase";
+import { createLeadPublic } from "@/lib/fyre-api";
 
 interface Message {
   type: "bot" | "user";
@@ -143,7 +143,7 @@ export default function QuizChat() {
       setIsTyping(true);
 
       try {
-        await createLead(newData);
+        await createLeadPublic(newData);
       } catch {
         console.error("Erro ao salvar lead");
         alert("Erro ao salvar suas informacoes. Por favor, tente novamente.");

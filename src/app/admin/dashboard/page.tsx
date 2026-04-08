@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { getCalendarEvents } from "@/lib/fyre-api";
 import {
   Lead,
   Client,
@@ -227,8 +228,7 @@ export default function DashboardPage() {
       setLoading(false);
 
       // Also fetch Google Calendar events (non-blocking)
-      fetch("/api/google-calendar/events")
-        .then((res) => res.json())
+      getCalendarEvents()
         .then((data) => {
           if (data.events) {
             const mapped = data.events.map((e: { id: string; title: string; description: string | null; scheduled_at: string; end_at: string; meeting_link: string | null }) => ({

@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { getSession } from "@/lib/admin-auth";
+import { getCalendarEvents, createCalendarEvent, syncCalendar, notifyMeeting, aiChat } from "@/lib/fyre-api";
 import { Meeting, Client, Lead, USERS_MAP, normalizeMeeting, formatWhatsApp } from "@/lib/types";
 import {
   format,
@@ -196,12 +197,9 @@ export default function CalendarioPage() {
   const fetchGoogleEvents = useCallback(async () => {
     try {
       // Auto-sync: notify + create leads for new events
-      fetch("/api/cron/sync-calendar", {
-        headers: { Authorization: "Bearer fyre-sync-2026" },
-      }).catch(() => {});
+      syncCalendar().catch(() => {});
 
-      const res = await fetch("/api/google-calendar/events");
-      const data = await res.json();
+      const data = await getCalendarEvents();
       if (data.connected !== undefined) setGoogleConnected(data.connected);
       if (data.events) {
         const mapped: MeetingWithRelations[] = data.events.map((e: { id: string; title: string; description: string | null; scheduled_at: string; end_at: string; meeting_link: string | null; attendees: { email: string; name: string }[]; location: string | null }) => ({
@@ -441,16 +439,12 @@ export default function CalendarioPage() {
     const endAt = new Date(
       `${form.scheduled_at_date}T${form.end_time}:00`
     ).toISOString();
-    fetch("/api/google-calendar/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: `${eventTypeLabel}: ${form.title}`,
-        description: descParts.join("\n") || undefined,
-        start: scheduledAt,
-        end: endAt,
-        meeting_link: form.meeting_link || undefined,
-      }),
+    createCalendarEvent({
+      title: `${eventTypeLabel}: ${form.title}`,
+      description: descParts.join("\n") || undefined,
+      start: scheduledAt,
+      end: endAt,
+      meeting_link: form.meeting_link || undefined,
     }).catch(() => {});
 
     // Notify DIRETORIA group via Ayla + auto-create lead
@@ -462,10 +456,7 @@ export default function CalendarioPage() {
     const currentSession = getSession();
 
     try {
-      await fetch("/api/notify-meeting", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      await notifyMeeting({
           title: form.title,
           date: new Date(`${form.scheduled_at_date}T12:00:00`).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" }),
           time: form.scheduled_at_time,
@@ -474,8 +465,7 @@ export default function CalendarioPage() {
           contact: contactName || undefined,
           link: form.meeting_link || undefined,
           createdBy: currentSession ? USERS_MAP[currentSession.id]?.name : undefined,
-        }),
-      });
+        });
     } catch { /* silent */ }
 
     // Move lead to "agendado" if meeting is for a lead
@@ -513,25 +503,19 @@ export default function CalendarioPage() {
     setGeneratingSummary(true);
     setAiSummary("");
     try {
-      const res = await fetch("/api/ai/team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "chat",
-          agentSystemPrompt: "Você é um analista de reuniões especialista. Analise transcrições e gere resumos executivos estruturados, práticos e acionáveis.",
+      const data = await aiChat({
+          agentSystemPrompt: "Voce e um analista de reunioes especialista. Analise transcricoes e gere resumos executivos estruturados, praticos e acionaveis.",
           messages: [
             {
               role: "user",
-              content: `Analise esta transcrição de reunião e gere um resumo estruturado com:\n\n1. **Resumo Executivo** (2-3 frases)\n2. **Pontos-chave discutidos**\n3. **Insights importantes**\n4. **Próximos passos / Action items**\n5. **Oportunidades identificadas**\n\nTranscrição:\n${transcription}`,
+              content: `Analise esta transcricao de reuniao e gere um resumo estruturado com:\n\n1. **Resumo Executivo** (2-3 frases)\n2. **Pontos-chave discutidos**\n3. **Insights importantes**\n4. **Proximos passos / Action items**\n5. **Oportunidades identificadas**\n\nTranscricao:\n${transcription}`,
             },
           ],
-        }),
-      });
-      const data = await res.json();
+        });
       if (data.output) {
-        setAiSummary(data.result);
+        setAiSummary(data.output);
       } else {
-        alert("Erro ao gerar resumo: " + (data.error || "resposta vazia"));
+        alert("Erro ao gerar resumo: resposta vazia");
       }
     } catch {
       alert("Erro ao gerar resumo.");
@@ -692,10 +676,7 @@ export default function CalendarioPage() {
               <button
                 onClick={async () => {
                   try {
-                    const res = await fetch("/api/cron/sync-calendar", {
-                      headers: { Authorization: "Bearer fyre-sync-2026" },
-                    });
-                    const data = await res.json();
+                    const data = await syncCalendar();
                     if (data.synced > 0) {
                       alert(`✅ ${data.synced} novo(s) evento(s) sincronizado(s)!\n\n${data.results?.map((r: { event: string }) => `• ${r.event}`).join("\n") || ""}`);
                       fetchGoogleEvents();
@@ -715,7 +696,7 @@ export default function CalendarioPage() {
               </button>
             ) : (
               <a
-                href="/api/google-calendar/auth"
+                href="https://fyre-back.vercel.app/api/calendar/auth"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] text-white/50 hover:text-white/80 hover:bg-white/[0.06] border border-white/[0.06] transition-all text-xs font-medium"
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
               >

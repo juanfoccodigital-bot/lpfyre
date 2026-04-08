@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase, uploadFile, uploadFileToPath } from "@/lib/supabase";
+import { getMetaInsights, aiChat } from "@/lib/fyre-api";
 import { getSession, AuthSession } from "@/lib/admin-auth";
 import {
   Client,
@@ -297,16 +298,11 @@ export default function ClientsPage() {
       until = new Date().toISOString().split("T")[0];
     }
     try {
-      const res = await fetch("/api/meta", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const data = await getMetaInsights({
           accountId: meta.meta.meta_ads_id,
           accessToken: meta.meta.meta_token,
           dateRange: { since, until },
-        }),
-      });
-      const data = await res.json();
+        });
       if (data.error) { alert("Erro Meta: " + data.error); return; }
       setTrafficData(data);
     } catch { alert("Erro de conexão"); }
@@ -1636,16 +1632,14 @@ export default function ClientsPage() {
                           if (!meetingTranscription.trim()) { alert("Adicione a transcrição primeiro."); return; }
                           setGeneratingAiSummary(true);
                           try {
-                            const res = await fetch("/api/ai/team", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({
-                                agentId: "estrategista",
-                                message: `Analise esta transcrição de reunião com o cliente "${selectedClient?.nome || ""}" (${selectedClient?.empresa || ""}) e gere:\n\n1. **Resumo** (3-5 pontos principais)\n2. **Decisões tomadas**\n3. **Próximos passos** (action items com responsáveis se possível)\n4. **Insights importantes** (oportunidades, riscos, observações)\n\nTranscrição:\n${meetingTranscription}`,
-                              }),
+                            const data = await aiChat({
+                              agentSystemPrompt: "Voce e um analista de reunioes especialista da FYRE.",
+                              messages: [{
+                                role: "user",
+                                content: `Analise esta transcricao de reuniao com o cliente "${selectedClient?.nome || ""}" (${selectedClient?.empresa || ""}) e gere:\n\n1. **Resumo** (3-5 pontos principais)\n2. **Decisoes tomadas**\n3. **Proximos passos** (action items com responsaveis se possivel)\n4. **Insights importantes** (oportunidades, riscos, observacoes)\n\nTranscricao:\n${meetingTranscription}`,
+                              }],
                             });
-                            const data = await res.json();
-                            setMeetingAiSummary(data.response || data.reply || "Erro ao gerar resumo.");
+                            setMeetingAiSummary(data.output || "Erro ao gerar resumo.");
                           } catch {
                             setMeetingAiSummary("Erro ao conectar com a IA.");
                           }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { getPortalSession } from "@/lib/portal-auth";
+import { getMetaInsights } from "@/lib/fyre-api";
 import {
   Client,
   TrafficData,
@@ -275,34 +276,33 @@ export default function PortalDashboardPage() {
           const metaAdsId = obs?.meta_ads_id;
           const metaToken = obs?.meta_token;
           if (metaAdsId && metaToken) {
-            const metaRes = await fetch("/api/meta", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ accountId: metaAdsId, accessToken: metaToken }),
-            });
-            if (metaRes.ok) {
-              const metaJson = await metaRes.json();
-              traffic = (metaJson.daily || []).map((d: any) => ({
-                id: d.date,
-                client_id: clientId,
-                date: d.date,
-                platform: "meta",
-                impressions: d.impressions || 0,
-                clicks: d.clicks || 0,
-                spend: d.spend || 0,
-                leads: d.leads || 0,
-                conversions: d.conversions || 0,
-                revenue: d.revenue || 0,
-                cpc: d.cpc || 0,
-                cpl: d.cpl || 0,
-                cpa: d.cpa || 0,
-                roas: d.roas || 0,
-                created_at: d.date,
-              }));
+            try {
+              const metaJson = await getMetaInsights({ accountId: metaAdsId, accessToken: metaToken });
+              if (metaJson) {
+                traffic = (metaJson.daily || []).map((d: any) => ({
+                  id: d.date,
+                  client_id: clientId,
+                  date: d.date,
+                  platform: "meta",
+                  impressions: d.impressions || 0,
+                  clicks: d.clicks || 0,
+                  spend: d.spend || 0,
+                  leads: d.leads || 0,
+                  conversions: d.conversions || 0,
+                  revenue: d.revenue || 0,
+                  cpc: d.cpc || 0,
+                  cpl: d.cpl || 0,
+                  cpa: d.cpa || 0,
+                  roas: d.roas || 0,
+                  created_at: d.date,
+                }));
+              }
+            } catch (_) {
+              // Silently fail - will show empty state
             }
           }
-        } catch (_) {
-          // Silently fail - will show empty state
+        } catch {
+          // Silently fail
         }
       }
       setTrafficData(traffic);

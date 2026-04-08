@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { toJpeg } from "html-to-image";
+import { aiContent } from "@/lib/fyre-api";
 
 /* ─── Types ─── */
 interface Slide {
@@ -153,12 +154,7 @@ export default function InstagramPostCreator() {
     if (!topic.trim()) return;
     setLoadingText(true);
     try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "generate-text", topic, mode: isCarousel ? "carrossel" : "estatico" }),
-      });
-      const data = await res.json();
+      const data = await aiContent({ action: "generate-text", topic, mode: isCarousel ? "carrossel" : "estatico" });
       if (data.error) { alert("Erro da IA: " + data.error); return; }
       const r = data.result || {};
       if (isCarousel && r.slides) {
@@ -182,12 +178,7 @@ export default function InstagramPostCreator() {
     if (!topic.trim()) return;
     setLoadingImage(true);
     try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "generate-image", prompt: topic }),
-      });
-      const data = await res.json();
+      const data = await aiContent({ action: "generate-image", prompt: topic });
       if (data.imageUrl) {
         if (isCarousel) {
           updateSlide(activeSlide, "image", data.imageUrl);

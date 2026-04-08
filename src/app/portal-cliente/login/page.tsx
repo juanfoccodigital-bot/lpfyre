@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authenticateClient, setPortalSession } from "@/lib/portal-auth";
+import { loginPortal } from "@/lib/fyre-api";
 
 export default function PortalClienteLoginPage() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function PortalClienteLoginPage() {
     }
 
     setPortalSession(session);
+    try { await loginPortal(username, password); } catch { /* JWT optional for now */ }
     router.push("/portal-cliente/dashboard");
   }
 
