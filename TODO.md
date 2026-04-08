@@ -1,0 +1,6 @@
+- [x] Refatorar `src/components/Navbar.tsx` para melhorar layout visual do cabeçalho (desktop e mobile)
+- [x] Melhorar acessibilidade do menu mobile (`aria-expanded`, `aria-controls`, id do menu)
+- [x] Ajustar comportamento do menu mobile (fechar ao clicar fora e ao navegar)
+- [x] Refinar estados ativos/hover dos links e CTAs
+- [ ] Validar build/lint rapidamente para checar regressões
+- [x] Atualizar este TODO com progresso concluído

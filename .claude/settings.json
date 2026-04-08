@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(printf 'https://uhuhfafxurbqsfsgxyyc.supabase.co')",
+      "Bash(curl -s 'https://uhuhfafxurbqsfsgxyyc.supabase.co/rest/v1/client_content?select=*&limit=1' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVodWhmYWZ4dXJicXNmc2d4eXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDE2MTgsImV4cCI6MjA4ODExNzYxOH0.S2dJQy_tcbxlTjF1jUdAeQs5ie7uQH6E2iseiLC9_eU' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVodWhmYWZ4dXJicXNmc2d4eXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDE2MTgsImV4cCI6MjA4ODExNzYxOH0.S2dJQy_tcbxlTjF1jUdAeQs5ie7uQH6E2iseiLC9_eU')",
+      "Bash(curl -s -X DELETE 'https://uhuhfafxurbqsfsgxyyc.supabase.co/rest/v1/client_content?client_id=eq.3e96c511-0385-4f0b-959c-a7b88a3a5d7f&post_type=neq.stories' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVodWhmYWZ4dXJicXNmc2d4eXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDE2MTgsImV4cCI6MjA4ODExNzYxOH0.S2dJQy_tcbxlTjF1jUdAeQs5ie7uQH6E2iseiLC9_eU' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVodWhmYWZ4dXJicXNmc2d4eXljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NDE2MTgsImV4cCI6MjA4ODExNzYxOH0.S2dJQy_tcbxlTjF1jUdAeQs5ie7uQH6E2iseiLC9_eU')"
+    ]
+  }
+}
