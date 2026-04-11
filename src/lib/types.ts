@@ -61,9 +61,59 @@ export interface Client {
   estado: string | null;
   payment_link: string | null;
   contract_url: string | null;
+  // Novos campos
+  plano: string | null; // starter, pro, scale, elite
+  segmento: string | null;
+  site_url: string | null;
+  instagram: string | null;
+  horario_funcionamento: string | null;
+  drive_url: string | null;
+  sheets_url: string | null;
+  meta_ads_id: string | null;
+  meta_token: string | null;
+  whatsapp_api_number: string | null;
+  tom_de_voz: string | null;
+  descricao_negocio: string | null;
   created_at: string;
   updated_at: string;
 }
+
+export interface ClientAutomation {
+  id: string;
+  client_id: string;
+  title: string;
+  description: string | null;
+  status: string; // pendente, em_andamento, concluido
+  type: string; // whatsapp_bot, faq_bot, followup, crm_setup, n8n_flow, evolution_setup, outro
+  assigned_to: string | null;
+  ai_generated: boolean;
+  sort_order: number;
+  created_at: string;
+  completed_at: string | null;
+}
+
+export const PLANOS_FYRE = [
+  { value: "starter", label: "Starter — R$1.297/mês" },
+  { value: "pro", label: "Pro — R$1.997/mês" },
+  { value: "scale", label: "Scale — R$2.997/mês" },
+  { value: "elite", label: "Elite — Sob consulta" },
+  { value: "custom", label: "Personalizado" },
+] as const;
+
+export const SEGMENTOS = [
+  "Clínica odontológica",
+  "Clínica estética",
+  "Clínica médica",
+  "Imobiliária",
+  "Corretora de seguros",
+  "E-commerce",
+  "Infoprodutor",
+  "Serviços B2B",
+  "Varejo",
+  "Educação",
+  "SaaS",
+  "Outro",
+] as const;
 
 export interface OnboardingItem {
   id: string;
@@ -242,15 +292,35 @@ export const KANBAN_COLUMNS = [
 ] as const;
 
 export const ONBOARDING_TEMPLATE = [
-  { key: "grupo_whatsapp", label: "Grupo no WhatsApp criado" },
-  { key: "portal_drive", label: "Portal do Cliente (Drive) criado" },
-  { key: "briefing", label: "Briefing enviado e preenchido" },
-  { key: "acessos", label: "Acessos recebidos" },
-  { key: "kickoff", label: "Call de kickoff realizada" },
-  { key: "contrato", label: "Contrato assinado" },
-  { key: "pagamento", label: "Primeiro pagamento confirmado" },
-  { key: "setup", label: "Setup inicial concluído" },
-  { key: "primeira_entrega", label: "Primeira entrega realizada" },
+  // Etapa 1 — Contrato e pagamento
+  { key: "contrato", label: "Contrato assinado", category: "Contratação" },
+  { key: "pagamento", label: "Primeiro pagamento confirmado", category: "Contratação" },
+  { key: "plano_definido", label: "Plano e escopo definidos", category: "Contratação" },
+  // Etapa 2 — Kickoff
+  { key: "kickoff", label: "Reunião de kickoff realizada", category: "Kickoff" },
+  { key: "dados_empresa", label: "Dados da empresa coletados (segmento, produtos, tom de voz)", category: "Kickoff" },
+  { key: "objetivo_definido", label: "Objetivo do 1º mês definido", category: "Kickoff" },
+  { key: "metricas_sucesso", label: "Métricas de sucesso alinhadas", category: "Kickoff" },
+  // Etapa 3 — Setup
+  { key: "grupo_whatsapp", label: "Grupo no WhatsApp criado", category: "Setup" },
+  { key: "drive_criado", label: "Drive criado com pastas padrão", category: "Setup" },
+  { key: "analise_perfil", label: "Análise de perfil digital realizada", category: "Setup" },
+  { key: "cronograma", label: "Cronograma definido", category: "Setup" },
+  { key: "acessos_meta", label: "Acessos Meta Ads coletados", category: "Setup" },
+  { key: "acessos_instagram", label: "Acesso Instagram coletado", category: "Setup" },
+  { key: "acessos_whatsapp", label: "Acesso WhatsApp API configurado", category: "Setup" },
+  { key: "crm_configurado", label: "CRM configurado (pipeline + usuários)", category: "Setup" },
+  // Etapa 4 — Automações
+  { key: "agente_whatsapp", label: "Agente IA WhatsApp configurado", category: "Automação" },
+  { key: "agente_testado", label: "Agente IA testado com simulações", category: "Automação" },
+  { key: "followup_configurado", label: "Follow-up automático configurado", category: "Automação" },
+  { key: "notificacoes", label: "Notificações para equipe configuradas", category: "Automação" },
+  // Etapa 5 — Treinamento e Go Live
+  { key: "treinamento", label: "Treinamento da equipe realizado", category: "Ativação" },
+  { key: "teste_final", label: "Teste final completo com o cliente", category: "Ativação" },
+  { key: "aprovacao_cliente", label: "Aprovação do cliente para ativar", category: "Ativação" },
+  { key: "go_live", label: "Go live — sistemas em produção", category: "Ativação" },
+  { key: "monitoramento_48h", label: "Monitoramento 48h pós-ativação", category: "Ativação" },
 ];
 
 export const USERS_MAP: Record<string, { name: string; username: string }> = {

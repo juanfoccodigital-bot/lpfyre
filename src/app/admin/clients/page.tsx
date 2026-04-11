@@ -111,6 +111,18 @@ function emptyClient(assignedTo: string): Omit<Client, "id" | "created_at" | "up
     estado: "",
     payment_link: "",
     contract_url: "",
+    plano: null,
+    segmento: null,
+    site_url: null,
+    instagram: null,
+    horario_funcionamento: null,
+    drive_url: null,
+    sheets_url: null,
+    meta_ads_id: null,
+    meta_token: null,
+    whatsapp_api_number: null,
+    tom_de_voz: null,
+    descricao_negocio: null,
   };
 }
 
@@ -838,6 +850,88 @@ export default function ClientsPage() {
                 </button>
               );
             })}
+          </div>
+        </div>
+
+        {/* ── Plano & Negócio ── */}
+        <div className="pt-3">
+          <p className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/25 mb-3">Plano & Negocio</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label className={labelClass}>Plano FYRE</label>
+              <select className={inputClass} value={(f.plano as string) || ""} onChange={(e) => update("plano", e.target.value || null)}>
+                <option value="">Selecionar plano</option>
+                <option value="starter">Starter — R$1.297/mes</option>
+                <option value="pro">Pro — R$1.997/mes</option>
+                <option value="scale">Scale — R$2.997/mes</option>
+                <option value="elite">Elite — Sob consulta</option>
+                <option value="custom">Personalizado</option>
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>Segmento</label>
+              <select className={inputClass} value={(f.segmento as string) || ""} onChange={(e) => update("segmento", e.target.value || null)}>
+                <option value="">Selecionar segmento</option>
+                {["Clinica odontologica", "Clinica estetica", "Clinica medica", "Imobiliaria", "Corretora de seguros", "E-commerce", "Infoprodutor", "Servicos B2B", "Varejo", "Educacao", "SaaS", "Outro"].map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>Instagram</label>
+              <input className={inputClass} value={(f.instagram as string) || ""} onChange={(e) => update("instagram", e.target.value)} placeholder="@perfil" />
+            </div>
+            <div>
+              <label className={labelClass}>Site</label>
+              <input className={inputClass} value={(f.site_url as string) || ""} onChange={(e) => update("site_url", e.target.value)} placeholder="https://..." />
+            </div>
+            <div>
+              <label className={labelClass}>Horario de Funcionamento</label>
+              <input className={inputClass} value={(f.horario_funcionamento as string) || ""} onChange={(e) => update("horario_funcionamento", e.target.value)} placeholder="Seg-Sex 8h-18h" />
+            </div>
+            <div>
+              <label className={labelClass}>Tom de Voz</label>
+              <input className={inputClass} value={(f.tom_de_voz as string) || ""} onChange={(e) => update("tom_de_voz", e.target.value)} placeholder="Profissional, amigavel..." />
+            </div>
+          </div>
+          <div className="mt-3">
+            <label className={labelClass}>Descricao do Negocio</label>
+            <textarea className={`${inputClass} min-h-[60px] resize-y`} value={(f.descricao_negocio as string) || ""} onChange={(e) => update("descricao_negocio", e.target.value)} placeholder="Descreva o negocio do cliente, produtos/servicos, publico-alvo..." />
+          </div>
+        </div>
+
+        {/* ── Links & Acessos ── */}
+        <div className="pt-3">
+          <p className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/25 mb-3">Links & Acessos</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className={labelClass}>Link do Drive</label>
+              <div className="flex gap-2">
+                <input className={`${inputClass} flex-1`} value={(f.drive_url as string) || ""} onChange={(e) => update("drive_url", e.target.value)} placeholder="https://drive.google.com/..." />
+                {(f.drive_url as string) && (
+                  <a href={f.drive_url as string} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-2 rounded-lg bg-blue-500/20 text-blue-400 text-xs font-semibold hover:bg-blue-500/30 transition-all border border-blue-500/20 whitespace-nowrap">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    Abrir
+                  </a>
+                )}
+              </div>
+            </div>
+            <div>
+              <label className={labelClass}>Link do Sheets (Funil)</label>
+              <div className="flex gap-2">
+                <input className={`${inputClass} flex-1`} value={(f.sheets_url as string) || ""} onChange={(e) => update("sheets_url", e.target.value)} placeholder="https://docs.google.com/spreadsheets/..." />
+                {(f.sheets_url as string) && (
+                  <a href={f.sheets_url as string} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-3 py-2 rounded-lg bg-green-500/20 text-green-400 text-xs font-semibold hover:bg-green-500/30 transition-all border border-green-500/20 whitespace-nowrap">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    Abrir
+                  </a>
+                )}
+              </div>
+            </div>
+            <div>
+              <label className={labelClass}>WhatsApp API (numero)</label>
+              <input className={inputClass} value={(f.whatsapp_api_number as string) || ""} onChange={(e) => update("whatsapp_api_number", e.target.value)} placeholder="5541999999999" />
+            </div>
           </div>
         </div>
 

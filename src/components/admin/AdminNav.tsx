@@ -18,6 +18,7 @@ const navLinks = [
   { label: "CRM", href: "/admin/crm" },
   { label: "Clientes", href: "/admin/clients" },
   { label: "Calendário", href: "/admin/calendario" },
+  { label: "Funil", href: "/admin/funil" },
   { label: "Financeiro", href: "/admin/financeiro" },
   { label: "Tarefas", href: "/admin/tarefas" },
   { label: "Operacional", href: "/admin/operacional" },
