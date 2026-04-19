@@ -5,31 +5,28 @@ import { useEffect, useState } from "react";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState("home");
 
   const links = [
+    { href: "#home", label: "Home" },
     { href: "#sobre", label: "Sobre" },
     { href: "#servicos", label: "Soluções" },
-    { href: "/planos", label: "Planos" },
-    { href: "#contato", label: "Contato" },
+    { href: "#resultados", label: "Resultados" },
+    { href: "#contato", label: "Diagnóstico" },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-
+      if (window.scrollY < 200) { setActiveSection("home"); return; }
       const sections = links.map((l) => l.href.replace("#", ""));
-      let current = "";
+      let current = "home";
       for (const id of sections) {
         const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 120) current = id;
-        }
+        if (el && el.getBoundingClientRect().top <= 120) current = id;
       }
       setActiveSection(current);
     };
-
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -37,57 +34,34 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!menuOpen) return;
-    const onEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
+    const onEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
     document.addEventListener("keydown", onEsc);
     return () => document.removeEventListener("keydown", onEsc);
   }, [menuOpen]);
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (!href.startsWith("#")) {
-      setMenuOpen(false);
-      return;
-    }
     e.preventDefault();
-    const id = href.replace("#", "");
-    const el = document.getElementById(id);
-    if (el) {
-      const offset = 88;
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    if (href === "#home") { window.scrollTo({ top: 0, behavior: "smooth" }); setMenuOpen(false); return; }
+    const el = document.getElementById(href.replace("#", ""));
+    if (el) { window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: "smooth" }); }
     setMenuOpen(false);
   };
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-white/10 bg-black/90 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl"
-          : "bg-black/55 backdrop-blur-md"
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        scrolled ? "bg-black/80 backdrop-blur-xl" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-10">
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            setMenuOpen(false);
-          }}
-          className="group flex items-center"
-          aria-label="Voltar ao topo"
-        >
-          <img
-            id="navbar-logo"
-            src="/images/logo-fyre.png"
-            alt="FYRE Automação & I.A"
-            className="h-8 w-auto transition-opacity duration-200 group-hover:opacity-85"
-          />
+      {/* Desktop — tudo centralizado numa linha */}
+      <div className="hidden lg:flex items-center justify-center h-20 px-6 gap-3">
+        {/* Logo */}
+        <a href="#home" onClick={(e) => scrollTo(e, "#home")} aria-label="Home">
+          <img id="navbar-logo" src="/images/logo-fyre.svg" alt="FYRE" className="h-7 w-auto hover:opacity-85 transition-opacity" />
         </a>
 
-        <div className="hidden items-center gap-7 lg:flex">
+        {/* Pill nav */}
+        <div className="flex items-center gap-0.5 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-md px-1 py-1">
           {links.map((link) => {
             const isActive = activeSection === link.href.replace("#", "");
             return (
@@ -95,78 +69,52 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => scrollTo(e, link.href)}
-                className={`relative text-[11px] font-medium uppercase tracking-[0.18em] transition-colors duration-200 ${
-                  isActive ? "text-white" : "text-white/60 hover:text-white"
+                className={`px-4 py-2 rounded-full text-[11px] font-medium uppercase tracking-[0.14em] whitespace-nowrap transition-all duration-300 ${
+                  isActive
+                    ? "bg-white/[0.1] text-white"
+                    : "text-white/40 hover:text-white/70"
                 }`}
               >
                 {link.label}
-                <span
-                  className={`absolute -bottom-1.5 left-0 h-px bg-white transition-all duration-300 ${
-                    isActive ? "w-full" : "w-0"
-                  }`}
-                />
               </a>
             );
           })}
-
-          <div className="ml-2 flex items-center gap-3">
-            <a
-              href="#contato"
-              onClick={(e) => scrollTo(e, "#contato")}
-              className="rounded-md border border-white/30 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-200 hover:bg-white hover:text-black"
-            >
-              Diagnóstico Gratuito
-            </a>
-            <a
-              href="/portal-cliente"
-              className="rounded-md border border-white/15 bg-white/[0.06] px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80 transition-all duration-200 hover:border-white/30 hover:bg-white/[0.14] hover:text-white"
-            >
-              Portal do Cliente
-            </a>
-          </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          className="inline-flex items-center justify-center rounded-md border border-white/15 p-2 text-white lg:hidden"
-          aria-label="Abrir menu"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
+        {/* CTA */}
+        <a
+          href="#aplicacao"
+          onClick={(e) => scrollTo(e, "#aplicacao")}
+          className="px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-md text-[11px] font-medium uppercase tracking-[0.14em] text-white/50 whitespace-nowrap transition-all duration-300 hover:bg-[#00FF2B]/[0.08] hover:border-[#00FF2B]/20 hover:text-[#00FF2B]"
         >
-          <span
-            className={`block h-[1.5px] w-6 bg-white transition-all duration-300 ${
-              menuOpen ? "translate-y-[5px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`mt-1.5 block h-[1.5px] w-6 bg-white transition-all duration-300 ${
-              menuOpen ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`mt-1.5 block h-[1.5px] w-6 bg-white transition-all duration-300 ${
-              menuOpen ? "-translate-y-[5px] -rotate-45" : ""
-            }`}
-          />
+          Entrar em Contato
+        </a>
+      </div>
+
+      {/* Mobile — logo esquerda, hamburger direita */}
+      <div className="flex lg:hidden items-center justify-between h-16 px-5">
+        <a href="#home" onClick={(e) => scrollTo(e, "#home")} aria-label="Home">
+          <img id="navbar-logo-mobile" src="/images/logo-fyre.svg" alt="FYRE" className="h-6 w-auto" />
+        </a>
+        <button
+          onClick={() => setMenuOpen((p) => !p)}
+          className="flex flex-col items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.04] p-2.5"
+          aria-label="Menu"
+        >
+          <span className={`block h-[1.5px] w-5 bg-white transition-all duration-300 ${menuOpen ? "translate-y-[5px] rotate-45" : ""}`} />
+          <span className={`mt-1.5 block h-[1.5px] w-5 bg-white transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`mt-1.5 block h-[1.5px] w-5 bg-white transition-all duration-300 ${menuOpen ? "-translate-y-[5px] -rotate-45" : ""}`} />
         </button>
       </div>
 
+      {/* Mobile overlay */}
       {menuOpen && (
-        <button
-          aria-label="Fechar menu"
-          onClick={() => setMenuOpen(false)}
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-        />
+        <button aria-label="Fechar" onClick={() => setMenuOpen(false)} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" />
       )}
 
-      <div
-        id="mobile-menu"
-        className={`relative z-50 overflow-hidden border-t border-white/10 bg-black/95 backdrop-blur-xl transition-all duration-300 lg:hidden ${
-          menuOpen ? "max-h-[520px]" : "max-h-0"
-        }`}
-      >
-        <div className="flex flex-col gap-5 px-6 py-6">
+      {/* Mobile menu dropdown */}
+      <div className={`relative z-50 overflow-hidden border-t border-white/[0.06] bg-black/95 backdrop-blur-xl transition-all duration-300 lg:hidden ${menuOpen ? "max-h-[420px]" : "max-h-0"}`}>
+        <div className="flex flex-col gap-1 px-5 py-5">
           {links.map((link) => {
             const isActive = activeSection === link.href.replace("#", "");
             return (
@@ -174,28 +122,20 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => scrollTo(e, link.href)}
-                className={`text-[12px] font-medium uppercase tracking-[0.18em] transition-colors duration-200 ${
-                  isActive ? "text-white" : "text-white/70 hover:text-white"
+                className={`px-4 py-3 rounded-xl text-[12px] font-medium uppercase tracking-[0.16em] transition-all ${
+                  isActive ? "text-white bg-white/[0.06]" : "text-white/50"
                 }`}
               >
                 {link.label}
               </a>
             );
           })}
-
           <a
-            href="#contato"
-            onClick={(e) => scrollTo(e, "#contato")}
-            className="mt-2 rounded-md border border-white/30 px-5 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-white transition-all duration-200 hover:bg-white hover:text-black"
+            href="#aplicacao"
+            onClick={(e) => scrollTo(e, "#aplicacao")}
+            className="mt-2 px-4 py-3 rounded-xl border border-[#00FF2B]/20 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-[#00FF2B]/60 hover:bg-[#00FF2B]/[0.06]"
           >
-            Diagnóstico Gratuito
-          </a>
-          <a
-            href="/portal-cliente"
-            onClick={() => setMenuOpen(false)}
-            className="rounded-md border border-white/15 bg-white/[0.06] px-5 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-white/80 transition-all duration-200 hover:border-white/30 hover:bg-white/[0.14] hover:text-white"
-          >
-            Portal do Cliente
+            Entrar em Contato
           </a>
         </div>
       </div>

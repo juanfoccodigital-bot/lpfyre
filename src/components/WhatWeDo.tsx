@@ -71,13 +71,13 @@ export default function WhatWeDo() {
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-12">
         {/* Header */}
         <div className="mb-10 sm:mb-20 reveal">
-          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/30 mb-4 block">
+          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-[#00FF2B]/40 mb-4 block">
             Soluções
           </span>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <h2 className="text-4xl sm:text-5xl font-[family-name:var(--font-instrument)] tracking-tight text-white">
               O que{" "}
-              <span className="text-gradient italic">fazemos</span>
+              <span className="text-gradient-fyre italic">fazemos</span>
             </h2>
             <p className="text-sm font-light text-white/30 max-w-md">
               Automação, IA, sistemas e estrutura digital sob medida. Nada de
@@ -87,22 +87,22 @@ export default function WhatWeDo() {
         </div>
 
         {/* Services grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/[0.06] stagger-children">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-[#00FF2B]/[0.06] stagger-children">
           {services.map((service) => (
             <div
               key={service.number}
-              className="bg-black p-8 sm:p-10 group hover:bg-white/[0.03] transition-all duration-500 cursor-default relative overflow-hidden"
+              className="bg-black p-8 sm:p-10 group hover:bg-[#00FF2B]/[0.02] transition-all duration-500 cursor-default relative overflow-hidden"
             >
               {/* Hover glow */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.04)_0%,transparent_60%)]" />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(0,255,43,0.06)_0%,transparent_60%)]" />
 
               <div className="relative z-10">
                 {/* Icon + Number */}
                 <div className="flex items-center justify-between mb-6">
-                  <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-white/30 group-hover:text-white/60 group-hover:border-white/20 transition-all duration-500">
+                  <div className="w-10 h-10 rounded-xl border border-[#00FF2B]/10 flex items-center justify-center text-[#00FF2B]/30 group-hover:text-[#00FF2B]/70 group-hover:border-[#00FF2B]/25 group-hover:shadow-[0_0_12px_rgba(0,255,43,0.1)] transition-all duration-500">
                     {service.icon}
                   </div>
-                  <span className="text-[10px] font-bold tracking-[0.3em] text-white/10 group-hover:text-white/20 transition-colors duration-500">
+                  <span className="text-[10px] font-bold tracking-[0.3em] text-white/10 group-hover:text-[#00FF2B]/20 transition-colors duration-500">
                     {service.number}
                   </span>
                 </div>
@@ -114,9 +114,15 @@ export default function WhatWeDo() {
                   {service.desc}
                 </p>
 
-                {/* Animated bottom line */}
+                {/* Animated bottom line — neon gradient */}
                 <div className="mt-6 h-[1px] bg-white/5 relative overflow-hidden">
-                  <div className="absolute inset-y-0 left-0 w-0 bg-white/30 group-hover:w-full transition-all duration-700" />
+                  <div
+                    className="absolute inset-y-0 left-0 w-0 group-hover:w-full transition-all duration-700"
+                    style={{
+                      background: "linear-gradient(90deg, #00FF2B, #CFFF00)",
+                      boxShadow: "0 0 6px rgba(0,255,43,0.3)",
+                    }}
+                  />
                 </div>
               </div>
             </div>

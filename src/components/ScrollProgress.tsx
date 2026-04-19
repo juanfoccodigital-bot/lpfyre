@@ -20,8 +20,12 @@ export default function ScrollProgress() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[60] h-[2px]">
       <div
-        className="h-full bg-gradient-to-r from-white/60 via-white to-white/60 transition-none"
-        style={{ width: `${progress}%` }}
+        className="h-full transition-none"
+        style={{
+          width: `${progress}%`,
+          background: "linear-gradient(90deg, #00FF2B, #CFFF00)",
+          boxShadow: "0 0 10px rgba(0, 255, 43, 0.5), 0 0 30px rgba(0, 255, 43, 0.2)",
+        }}
       />
     </div>
   );

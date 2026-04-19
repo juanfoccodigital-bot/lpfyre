@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Instrument_Serif } from "next/font/google";
+import CustomCursor from "@/components/CustomCursor";
+import AmbientSound from "@/components/AmbientSound";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -29,7 +31,10 @@ export const metadata: Metadata = {
     "FYRE",
   ],
   icons: {
-    icon: "/favicon-32.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+    ],
     apple: "/apple-icon.png",
   },
 };
@@ -41,7 +46,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${montserrat.variable} ${instrumentSerif.variable}`}>
-      <body className="grain-overlay">{children}</body>
+      <body className="grain-overlay">
+        <CustomCursor />
+        <AmbientSound />
+        {children}
+      </body>
     </html>
   );
 }

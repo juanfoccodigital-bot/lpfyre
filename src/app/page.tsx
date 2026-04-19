@@ -7,14 +7,17 @@ import SplashScreen from "@/components/SplashScreen";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import MarqueeBanner from "@/components/MarqueeBanner";
+import ApplicationForm from "@/components/ApplicationForm";
 import About from "@/components/About";
 import WhatWeDo from "@/components/WhatWeDo";
 import MarqueeBanner2 from "@/components/MarqueeBanner2";
-import TechDivider from "@/components/TechDivider";
 import Automatizacao from "@/components/Automatizacao";
+import TechDivider from "@/components/TechDivider";
+import Results from "@/components/Results";
+import ResultsShowcase from "@/components/ResultsShowcase";
 import Founders from "@/components/Founders";
-import Testimonials from "@/components/Testimonials";
-import QuizChat from "@/components/QuizChat";
+import FAQ from "@/components/FAQ";
+import DiagnosticoIA from "@/components/DiagnosticoIA";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -32,14 +35,17 @@ export default function Home() {
       <Navbar />
       <Hero />
       <MarqueeBanner />
+      <ApplicationForm />
       <About />
       <WhatWeDo />
       <MarqueeBanner2 />
       <Automatizacao />
       <TechDivider />
+      <Results />
+      <ResultsShowcase />
       <Founders />
-      <Testimonials />
-      <QuizChat />
+      <DiagnosticoIA />
+      <FAQ />
       <Footer />
     </main>
   );

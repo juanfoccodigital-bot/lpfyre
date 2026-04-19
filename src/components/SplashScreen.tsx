@@ -21,7 +21,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     }
   }, []);
 
-  // Grid canvas animation
+  // Grid canvas animation with neon green
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -50,16 +50,22 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
 
           ctx.beginPath();
           ctx.arc(x, y, 1, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 69, 0, ${alpha})`;
+          // Gradient from green to lime based on position
+          const mixRatio = (x / canvas.width + y / canvas.height) / 2;
+          const r = Math.round(0 + mixRatio * 207);
+          const g = Math.round(255);
+          const b = Math.round(43 - mixRatio * 43);
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
           ctx.fill();
         }
       }
 
+      // Scan line effect
       const scanY = (frame * 1.5) % canvas.height;
       const gradient = ctx.createLinearGradient(0, scanY - 1, 0, scanY + 1);
-      gradient.addColorStop(0, "rgba(255, 69, 0, 0)");
-      gradient.addColorStop(0.5, "rgba(255, 69, 0, 0.08)");
-      gradient.addColorStop(1, "rgba(255, 69, 0, 0)");
+      gradient.addColorStop(0, "rgba(0, 255, 43, 0)");
+      gradient.addColorStop(0.5, "rgba(0, 255, 43, 0.08)");
+      gradient.addColorStop(1, "rgba(0, 255, 43, 0)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, scanY - 30, canvas.width, 60);
 
@@ -125,10 +131,11 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         }}
       />
 
-      {/* Radial glow */}
+      {/* Radial glow — neon green */}
       <div
-        className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fyre/[0.06] blur-[120px]"
+        className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
         style={{
+          background: "radial-gradient(circle, rgba(0,255,43,0.08), rgba(207,255,0,0.04) 50%, transparent)",
           transitionProperty: "opacity, transform",
           transitionDuration: "1800ms",
           transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -137,7 +144,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         }}
       />
 
-      {/* Corner brackets */}
+      {/* Corner brackets — neon green */}
       {["top-6 left-6", "top-6 right-6 rotate-90", "bottom-6 right-6 rotate-180", "bottom-6 left-6 -rotate-90"].map(
         (pos, i) => (
           <div
@@ -151,7 +158,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
             }}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M2 8V2h6" stroke="rgba(255,69,0,0.2)" strokeWidth="0.5" />
+              <path d="M2 8V2h6" stroke="rgba(0,255,43,0.25)" strokeWidth="0.5" />
             </svg>
           </div>
         )
@@ -159,7 +166,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
 
       {/* Logo */}
       <img
-        src="/images/logo-fyre.png"
+        src="/images/logo-fyre.svg"
         alt="FYRE"
         className="fixed z-10 w-auto"
         style={{
@@ -194,42 +201,42 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         }}
       />
 
-      {/* Floating data fragments */}
+      {/* Floating data fragments — neon green */}
       {phase === "hold" && (
         <>
           <span
-            className="absolute font-mono text-[8px] text-fyre/10"
-            style={{ top: "20%", left: "15%", animation: "fadeIn 2s ease-out" }}
+            className="absolute font-mono text-[8px]"
+            style={{ top: "20%", left: "15%", color: "rgba(0,255,43,0.12)", animation: "fadeIn 2s ease-out" }}
           >
             {"<agent.init />"}
           </span>
           <span
-            className="absolute font-mono text-[8px] text-fyre/10"
-            style={{ top: "70%", right: "12%", animation: "fadeIn 2s ease-out 0.3s both" }}
+            className="absolute font-mono text-[8px]"
+            style={{ top: "70%", right: "12%", color: "rgba(207,255,0,0.10)", animation: "fadeIn 2s ease-out 0.3s both" }}
           >
             {"sys.crm.connect()"}
           </span>
           <span
-            className="absolute font-mono text-[8px] text-fyre/10"
-            style={{ top: "30%", right: "20%", animation: "fadeIn 2s ease-out 0.6s both" }}
+            className="absolute font-mono text-[8px]"
+            style={{ top: "30%", right: "20%", color: "rgba(0,255,43,0.10)", animation: "fadeIn 2s ease-out 0.6s both" }}
           >
             {"ai.model.load()"}
           </span>
           <span
-            className="absolute font-mono text-[8px] text-fyre/10"
-            style={{ top: "75%", left: "18%", animation: "fadeIn 2s ease-out 0.9s both" }}
+            className="absolute font-mono text-[8px]"
+            style={{ top: "75%", left: "18%", color: "rgba(207,255,0,0.08)", animation: "fadeIn 2s ease-out 0.9s both" }}
           >
             {"pipeline.ready"}
           </span>
           <span
-            className="absolute font-mono text-[8px] text-fyre/10"
-            style={{ top: "45%", left: "8%", animation: "fadeIn 2s ease-out 1.2s both" }}
+            className="absolute font-mono text-[8px]"
+            style={{ top: "45%", left: "8%", color: "rgba(0,255,43,0.10)", animation: "fadeIn 2s ease-out 1.2s both" }}
           >
             {"fyre.hub.sync()"}
           </span>
           <span
-            className="absolute font-mono text-[8px] text-fyre/10"
-            style={{ top: "55%", right: "8%", animation: "fadeIn 2s ease-out 0.5s both" }}
+            className="absolute font-mono text-[8px]"
+            style={{ top: "55%", right: "8%", color: "rgba(0,255,43,0.10)", animation: "fadeIn 2s ease-out 0.5s both" }}
           >
             {"auth.verify()"}
           </span>

@@ -21,29 +21,18 @@ const testimonials = [
   },
 ];
 
-const clientLogos = [
-  "Cliente 01",
-  "Cliente 02",
-  "Cliente 03",
-  "Cliente 04",
-  "Cliente 05",
-  "Cliente 06",
-  "Cliente 07",
-  "Cliente 08",
-];
-
 export default function Testimonials() {
   return (
     <section id="depoimentos" className="relative py-16 sm:py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-12">
         {/* Header */}
         <div className="text-center mb-20 reveal">
-          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/30 mb-4 block">
+          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-[#00FF2B]/40 mb-4 block">
             Resultados Reais
           </span>
           <h2 className="text-4xl sm:text-5xl font-[family-name:var(--font-instrument)] tracking-tight text-white">
             O que nossos clientes{" "}
-            <span className="text-gradient italic">dizem</span>
+            <span className="text-gradient-fyre italic">dizem</span>
           </h2>
         </div>
 
@@ -57,7 +46,7 @@ export default function Testimonials() {
               {/* Quote mark */}
               <div>
                 <svg
-                  className="w-8 h-8 text-white/10 mb-6"
+                  className="w-8 h-8 text-[#00FF2B]/15 mb-6"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -69,9 +58,9 @@ export default function Testimonials() {
               </div>
 
               <div>
-                {/* Result badge */}
-                <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full mb-4">
-                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/60">
+                {/* Result badge — neon */}
+                <div className="inline-block px-3 py-1 bg-[#00FF2B]/[0.06] border border-[#00FF2B]/15 rounded-full mb-4">
+                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-[#00FF2B]/70">
                     {testimonial.result}
                   </span>
                 </div>
@@ -89,8 +78,6 @@ export default function Testimonials() {
             </div>
           ))}
         </div>
-
-        {/* Client logos - oculto por enquanto */}
       </div>
     </section>
   );

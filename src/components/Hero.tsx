@@ -5,12 +5,25 @@ import { useEffect, useState, useRef } from "react";
 export default function Hero() {
   const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const orbRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLoaded(true);
   }, []);
 
-  // Floating particles
+  // Mouse parallax on orb
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!orbRef.current) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 30;
+      const y = (e.clientY / window.innerHeight - 0.5) * 30;
+      orbRef.current.style.transform = `translate(${x}px, ${y}px)`;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Floating particles with neon colors
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -26,6 +39,7 @@ export default function Hero() {
       vy: number;
       size: number;
       opacity: number;
+      color: string;
     }[] = [];
 
     const resize = () => {
@@ -35,15 +49,17 @@ export default function Hero() {
 
     const initParticles = () => {
       particles = [];
-      const count = Math.floor((canvas.width * canvas.height) / 15000);
+      const count = Math.floor((canvas.width * canvas.height) / 18000);
       for (let i = 0; i < count; i++) {
+        const isGreen = Math.random() > 0.3;
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: Math.random() * 1.5 + 0.5,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          size: Math.random() * 1.8 + 0.3,
           opacity: Math.random() * 0.15 + 0.03,
+          color: isGreen ? "0, 255, 43" : "207, 255, 0",
         });
       }
     };
@@ -62,20 +78,19 @@ export default function Hero() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.fillStyle = `rgba(${p.color}, ${p.opacity})`;
         ctx.fill();
 
-        // Draw connections
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[j].x - p.x;
           const dy = particles[j].y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 120) {
+          if (dist < 130) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.03 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(0, 255, 43, ${0.04 * (1 - dist / 130)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -109,14 +124,28 @@ export default function Hero() {
       <div className="grid-bg" />
 
       {/* Radial gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,255,43,0.03)_0%,transparent_60%)]" />
 
-      {/* Animated orbs */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-[0.02] blur-[100px] bg-white animate-[float_8s_ease-in-out_infinite]" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-[0.015] blur-[80px] bg-white animate-[float_10s_ease-in-out_infinite_2s]" />
+      {/* Floating orbs */}
+      <div ref={orbRef} className="absolute inset-0 pointer-events-none transition-transform duration-300 ease-out">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-[0.03] blur-[100px] bg-[#00FF2B] animate-[float_8s_ease-in-out_infinite]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-[0.02] blur-[80px] bg-[#CFFF00] animate-[float_10s_ease-in-out_infinite_2s]" />
+      </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-6 text-center pt-20 sm:pt-0">
+      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-6 text-center pt-28 sm:pt-24">
+        {/* Badge de credibilidade */}
+        <div
+          className={`transition-all duration-1000 delay-100 ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          <span className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.3em] uppercase text-[#00FF2B]/60 mb-6 border border-[#00FF2B]/15 px-4 py-1.5 rounded-full bg-[#00FF2B]/[0.04]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF2B] animate-pulse" />
+            +500 processos automatizados
+          </span>
+        </div>
+
         {/* Title */}
         <h1
           className={`transition-all duration-1000 delay-300 ${
@@ -124,22 +153,21 @@ export default function Hero() {
           }`}
         >
           <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-[family-name:var(--font-instrument)] tracking-tight leading-[1.1] text-white">
-            Seu negócio no <span className="italic">automático</span>
+            Pare de <span className="italic">operar.</span>
           </span>
-          <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-[family-name:var(--font-instrument)] tracking-tight leading-[1.1] text-gradient mt-1 pb-1">
-            com <span className="italic">inteligência</span>
+          <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-[family-name:var(--font-instrument)] tracking-tight leading-[1.1] text-gradient-fyre mt-1 pb-1">
+            Comece a <span className="italic">dominar.</span>
           </span>
         </h1>
 
         {/* Subtitle */}
         <p
-          className={`mt-6 text-sm sm:text-base font-light text-white/40 max-w-xl mx-auto leading-relaxed tracking-wide transition-all duration-1000 delay-700 ${
+          className={`mt-6 text-sm sm:text-base font-light text-white/45 max-w-xl mx-auto leading-relaxed tracking-wide transition-all duration-1000 delay-700 ${
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Sistemas de automação e inteligência artificial sob medida.
-          Construímos a tecnologia que faz seu negócio vender,
-          atender e escalar sozinho.
+          Construímos sistemas de automação e IA que vendem, atendem e escalam
+          por você. Enquanto você dorme, seu negócio continua fechando.
         </p>
 
         {/* CTA */}
@@ -149,7 +177,7 @@ export default function Hero() {
           }`}
         >
           <a href="#contato" className="cta-button group">
-            QUERO UM DIAGNÓSTICO
+            QUERO ESCALAR MEU NEGÓCIO
             <svg
               width="16"
               height="16"
@@ -162,8 +190,8 @@ export default function Hero() {
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </a>
-          <a href="#sistema" className="cta-button-outline group">
-            CONHEÇA NOSSAS SOLUÇÕES
+          <a href="#resultados" className="cta-button-outline group">
+            VER RESULTADOS REAIS
             <svg
               width="14"
               height="14"
@@ -177,21 +205,31 @@ export default function Hero() {
             </svg>
           </a>
         </div>
+
+        {/* Mini stats */}
+        <div
+          className={`mt-14 flex items-center justify-center gap-8 sm:gap-12 transition-all duration-1000 delay-[1100ms] ${
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          {[
+            { value: "320+", label: "Projetos" },
+            { value: "8+", label: "Anos" },
+            { value: "R$10M+", label: "Gerenciados" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-lg sm:text-xl font-black text-white">{stat.value}</div>
+              <div className="text-[9px] font-medium tracking-[0.2em] uppercase text-white/20">{stat.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-float">
-        <span className="text-[9px] font-medium tracking-[0.3em] uppercase text-white/20">
-          Scroll
-        </span>
-        <div className="w-[1px] h-8 bg-gradient-to-b from-white/20 to-transparent" />
-      </div>
-
-      {/* Corner decorations - hidden on mobile */}
-      <div className="hidden sm:block absolute top-24 left-8 w-12 h-12 border-l border-t border-white/[0.06]" />
-      <div className="hidden sm:block absolute top-24 right-8 w-12 h-12 border-r border-t border-white/[0.06]" />
-      <div className="hidden sm:block absolute bottom-16 left-8 w-12 h-12 border-l border-b border-white/[0.06]" />
-      <div className="hidden sm:block absolute bottom-16 right-8 w-12 h-12 border-r border-b border-white/[0.06]" />
+      {/* Corner decorations */}
+      <div className="hidden sm:block absolute top-24 left-8 w-12 h-12 border-l border-t border-[#00FF2B]/10" />
+      <div className="hidden sm:block absolute top-24 right-8 w-12 h-12 border-r border-t border-[#00FF2B]/10" />
+      <div className="hidden sm:block absolute bottom-16 left-8 w-12 h-12 border-l border-b border-[#00FF2B]/10" />
+      <div className="hidden sm:block absolute bottom-16 right-8 w-12 h-12 border-r border-b border-[#00FF2B]/10" />
     </section>
   );
 }
