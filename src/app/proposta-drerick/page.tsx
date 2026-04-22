@@ -102,6 +102,7 @@ const ONBOARDING_STEPS = [
       { name: "trafego_sazonalidade", label: "Existe sazonalidade no negocio? Meses fortes e fracos?", type: "textarea", required: false },
       { name: "trafego_ofertas", label: "Ofertas ou promocoes ativas para usar nos anuncios", type: "textarea", required: false },
       { name: "trafego_materiais", label: "Tem fotos/videos profissionais da clinica e equipe? (Sim/Nao - descreva)", type: "textarea", required: true },
+      { name: "trafego_social_media", label: "Tem social media? Se sim, quem cuida e com qual frequencia posta?", type: "textarea", required: false },
       { name: "trafego_resultados_anteriores", label: "Resultados de campanhas anteriores (se houver): custo por lead, ROAS, etc", type: "textarea", required: false },
     ],
   },
@@ -286,11 +287,11 @@ const TRAFEGO_FEATURES = [
   {
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
       </svg>
     ),
-    title: "Criativos e Copy",
-    desc: "Criacao de anuncios com copy estrategica, imagens e videos otimizados para conversao no seu segmento.",
+    title: "Sugestoes para Social Media",
+    desc: "Direcionamentos estrategicos de conteudo, pautas e sugestoes para o social media da clinica potencializar os resultados do trafego.",
   },
 ];
 
@@ -298,7 +299,7 @@ const INCLUDED = [
   { label: "Sistema de Atendimento ClinPro", desc: "Plataforma completa para gestao de atendimento" },
   { label: "5 Agentes de I.A", desc: "Atendimento, Qualificacao, Follow-up, Confirmacao e Pos-Atendimento" },
   { label: "Gestao de Trafego Pago Completa", desc: "Meta Ads + Google Ads com otimizacao semanal e relatorios" },
-  { label: "Criativos e Copy para Anuncios", desc: "Criacao de pecas, textos e estrategia de campanha" },
+  { label: "Sugestoes Estrategicas para Social Media", desc: "Direcionamentos de conteudo e pautas para potencializar os resultados" },
   { label: "R$300 em Tokens de I.A/mes", desc: "Incluso no plano. Excedente cobrado na fatura seguinte" },
   { label: "Suporte Prioritario", desc: "Suporte direto via WhatsApp com a equipe FYRE" },
   { label: "Grupo Exclusivo", desc: "Acesso ao grupo de clientes ClinPro para networking e dicas" },
@@ -601,7 +602,7 @@ export default function PropostaDrErick() {
             </div>
             <div className="neon-line max-w-[60px] mx-auto my-6" />
             <p className="text-xs font-light text-white/40 max-w-md mx-auto leading-relaxed">
-              Inclui 5 agentes de I.A, sistema ClinPro, gestao de trafego pago completa, criativos, R$300 em tokens, suporte, grupo e atualizacoes.
+              Inclui 5 agentes de I.A, sistema ClinPro, gestao de trafego pago completa, sugestoes para social media, R$300 em tokens, suporte, grupo e atualizacoes.
             </p>
             <p className="text-[10px] text-white/25 mt-2">Verba de midia nao inclusa</p>
 
