@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Montserrat, Instrument_Serif } from "next/font/google";
-import CustomCursor from "@/components/CustomCursor";
-import AmbientSound from "@/components/AmbientSound";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -47,8 +45,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${montserrat.variable} ${instrumentSerif.variable}`}>
       <body className="grain-overlay">
-        <CustomCursor />
-        <AmbientSound />
         {children}
       </body>
     </html>

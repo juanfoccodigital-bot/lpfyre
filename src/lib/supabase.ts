@@ -141,6 +141,58 @@ export async function uploadFileToPath(file: File, path: string): Promise<{ url:
   return { url: urlData.publicUrl, size: file.size };
 }
 
+// ─── ONBOARDING BRIEFING ───
+
+export interface OnboardingBriefingData {
+  cliente_nome: string;
+  cliente_empresa: string;
+  cliente_email: string;
+  cliente_whatsapp: string;
+  proposta_ref: string;
+  respostas: Record<string, string>;
+  arquivos: { nome: string; url: string; tipo: string }[];
+  status: "pendente" | "em_analise" | "concluido";
+}
+
+export async function createOnboardingBriefing(data: OnboardingBriefingData) {
+  const { error } = await supabase.from("onboarding_briefings").insert({
+    cliente_nome: data.cliente_nome,
+    cliente_empresa: data.cliente_empresa,
+    cliente_email: data.cliente_email,
+    cliente_whatsapp: data.cliente_whatsapp,
+    proposta_ref: data.proposta_ref,
+    respostas: data.respostas,
+    arquivos: data.arquivos,
+    status: data.status,
+  });
+
+  if (error) {
+    console.error("Erro ao criar briefing:", error);
+    throw error;
+  }
+}
+
+export async function uploadOnboardingFile(file: File, briefingRef: string): Promise<{ nome: string; url: string; tipo: string } | null> {
+  const timestamp = Date.now();
+  const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+  const path = `onboarding/${briefingRef}/${timestamp}_${safeName}`;
+
+  const { error } = await supabase.storage
+    .from("client-files")
+    .upload(path, file, { upsert: true });
+
+  if (error) {
+    console.error("Upload error:", error.message);
+    return null;
+  }
+
+  const { data: urlData } = supabase.storage
+    .from("client-files")
+    .getPublicUrl(path);
+
+  return { nome: file.name, url: urlData.publicUrl, tipo: file.type };
+}
+
 // ─── LEADS ───
 
 export async function createLead(data: LeadData) {

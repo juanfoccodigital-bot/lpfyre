@@ -29,13 +29,6 @@
     color: #fff;
   }
 
-  /* Hide default cursor on desktop (CustomCursor replaces it) */
-  @media (min-width: 1024px) {
-    * {
-      cursor: none !important;
-    }
-  }
-
   ::-webkit-scrollbar {
     width: 6px;
   }
