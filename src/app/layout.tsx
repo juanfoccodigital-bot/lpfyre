@@ -18,7 +18,7 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   title: "FYRE Automação & I.A | Arquitetura de Crescimento",
   description:
-    "A FYRE Automação & I.A não é uma agência. É uma empresa de tecnologia focada em automação e inteligência artificial. Método A.R.Q.U.E. — Arquitetura de Escala para negócios que querem parar de operar e começar a dominar.",
+    "A FYRE Automação & I.A não é uma agência. É uma empresa de tecnologia focada em automação e inteligência artificial para negócios que querem escalar com sistemas inteligentes.",
   keywords: [
     "automação",
     "inteligência artificial",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createLeadPublic } from "@/lib/fyre-api";
+import { createLeadPublic } from "@/lib/supabase";
 
 type Quadrant = "amplificar" | "manter" | "automatizar" | "pilotar" | null;
 

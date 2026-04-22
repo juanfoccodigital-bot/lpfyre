@@ -42,6 +42,37 @@ function parseFaturamento(value?: string): number | null {
   return null;
 }
 
+// ─── LEADS (Public) ───
+
+export async function createLeadPublic(body: LeadData) {
+  const assignee = await getNextAssignee();
+  const faturamentoNum = parseFaturamento(body.faturamento);
+
+  const { error } = await supabase.from("leads").insert({
+    nome: body.empresa || "Lead",
+    empresa: body.empresa || null,
+    email: body.email || null,
+    telefone: body.whatsapp || null,
+    faturamento: faturamentoNum,
+    observacoes: [
+      body.segmento && `Segmento: ${body.segmento}`,
+      body.desafio && `Desafio: ${body.desafio}`,
+      body.servico && `Interesse: ${body.servico}`,
+      body.faturamento && `Faturamento: ${body.faturamento}`,
+    ].filter(Boolean).join("\n"),
+    assigned_to: assignee,
+    status: "lead_novo",
+    resposta: false,
+    archived: false,
+  });
+
+  if (error) {
+    console.error("Erro ao criar lead:", error);
+    throw error;
+  }
+  return { success: true };
+}
+
 // ─── PROPOSTAS ───
 
 export interface PropostaData {

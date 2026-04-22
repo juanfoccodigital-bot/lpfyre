@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(claude api-usage:*)"
+      "Bash(claude api-usage:*)",
+      "Bash(ls:*)",
+      "Bash(cd:*)"
     ]
   }
 }

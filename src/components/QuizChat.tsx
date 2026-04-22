@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { createLeadPublic } from "@/lib/fyre-api";
+import { createLeadPublic } from "@/lib/supabase";
 
 interface Message {
   type: "bot" | "user";
@@ -72,7 +72,7 @@ const quizSteps = [
     options: [
       "Automação de processos com IA",
       "Sistemas de atendimento inteligente",
-"Consultoria Estratégica",
+      "Consultoria Estratégica",
       "Integração de APIs e sistemas",
       "CRM & Automação de vendas",
       "Solução completa de automação 360°",
@@ -125,10 +125,8 @@ export default function QuizChat() {
   const handleAnswer = async (answer: string) => {
     const step = quizSteps[currentStep];
 
-    // Add user message
     setMessages((prev) => [...prev, { type: "user", text: answer }]);
 
-    // Save data
     const newData = { ...leadData, [step.field]: answer };
     setLeadData(newData);
 
@@ -139,7 +137,6 @@ export default function QuizChat() {
       const nextQuestion = quizSteps[nextStep];
       simulateBotMessage(nextQuestion.question, nextQuestion.options);
     } else {
-      // All steps done — submit lead to Supabase
       setIsTyping(true);
 
       try {
@@ -155,7 +152,7 @@ export default function QuizChat() {
           ...prev,
           {
             type: "bot",
-            text: `Perfeito, ${newData.empresa}! Recebemos suas informações. Em breve um dos nossos fundadores entrará em contato com você para uma conversa personalizada sobre o seu negócio. Prepare-se para transformar seus resultados! 🔥`,
+            text: `Perfeito, ${newData.empresa}! Recebemos suas informações. Em breve um dos nossos fundadores entrará em contato com você para uma conversa personalizada sobre o seu negócio. Prepare-se para transformar seus resultados!`,
           },
         ]);
         setCompleted(true);
@@ -174,17 +171,17 @@ export default function QuizChat() {
 
   return (
     <section id="contato" className="relative py-16 sm:py-32 overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/[0.01] rounded-full blur-[150px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#00FF2B]/[0.02] rounded-full blur-[150px]" />
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-12">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-16 reveal">
-          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/30 mb-4 block">
+          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-[#00FF2B]/40 mb-4 block">
             Diagnóstico Gratuito
           </span>
           <h2 className="text-4xl sm:text-5xl font-[family-name:var(--font-instrument)] tracking-tight text-white">
             Pronto para{" "}
-            <span className="text-gradient italic">escalar?</span>
+            <span className="text-gradient-fyre italic">escalar?</span>
           </h2>
           <p className="mt-4 text-sm font-light text-white/30 max-w-lg mx-auto">
             Responda algumas perguntas rápidas e descubra como o FYRE 360°
@@ -196,19 +193,18 @@ export default function QuizChat() {
         <div className="max-w-2xl mx-auto reveal-scale">
           <div className="glass-card rounded-3xl overflow-hidden">
             {/* Chat header */}
-            <div className="px-6 py-4 border-b border-white/5 flex items-center gap-3">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <div className="px-6 py-4 border-b border-[#00FF2B]/[0.06] flex items-center gap-3">
+              <div className="w-2 h-2 bg-[#00FF2B] rounded-full animate-pulse shadow-[0_0_8px_rgba(0,255,43,0.5)]" />
               <span className="text-[11px] font-semibold tracking-[0.1em] uppercase text-white/40">
                 FYRE Assistente — Online
               </span>
             </div>
 
             {!chatStarted ? (
-              /* Start screen */
               <div className="p-8 sm:p-12 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 border border-white/10 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-6 border border-[#00FF2B]/15 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(0,255,43,0.06)]">
                   <svg
-                    className="w-7 h-7 text-white/30"
+                    className="w-7 h-7 text-[#00FF2B]/40"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -240,7 +236,6 @@ export default function QuizChat() {
               </div>
             ) : (
               <>
-                {/* Messages */}
                 <div
                   ref={chatRef}
                   className="p-6 h-[400px] overflow-y-auto flex flex-col gap-4"
@@ -254,7 +249,6 @@ export default function QuizChat() {
                               {msg.text}
                             </p>
                           </div>
-                          {/* Options */}
                           {msg.options &&
                             i === messages.length - 1 &&
                             !completed && (
@@ -281,7 +275,6 @@ export default function QuizChat() {
                     </div>
                   ))}
 
-                  {/* Typing indicator */}
                   {isTyping && (
                     <div className="chat-bubble flex gap-1.5 py-4 px-5 w-fit">
                       <div className="typing-dot" />
@@ -289,10 +282,8 @@ export default function QuizChat() {
                       <div className="typing-dot" />
                     </div>
                   )}
-
                 </div>
 
-                {/* Text input (for text-type questions) */}
                 {!completed &&
                   !isTyping &&
                   currentStepData?.type === "text" &&
@@ -300,7 +291,7 @@ export default function QuizChat() {
                   messages[messages.length - 1].type === "bot" && (
                     <form
                       onSubmit={handleSubmit}
-                      className="px-6 py-4 border-t border-white/5 flex gap-3"
+                      className="px-6 py-4 border-t border-[#00FF2B]/[0.06] flex gap-3"
                     >
                       <input
                         type="text"
@@ -309,12 +300,13 @@ export default function QuizChat() {
                         placeholder={
                           currentStepData.placeholder || "Digite aqui..."
                         }
-                        className="flex-1 bg-transparent border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-white/30 transition-colors"
+                        className="flex-1 bg-transparent border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-[#00FF2B]/30 transition-colors"
                         autoFocus
                       />
                       <button
                         type="submit"
-                        className="px-4 py-3 bg-white text-black rounded-xl font-semibold text-sm hover:bg-white/90 transition-colors"
+                        className="px-4 py-3 rounded-xl font-semibold text-sm text-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,43,0.3)]"
+                        style={{ background: "linear-gradient(135deg, #00FF2B, #CFFF00)" }}
                       >
                         <svg
                           width="18"
