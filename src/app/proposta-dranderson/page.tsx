@@ -334,7 +334,7 @@ export default function PropostaDrAnderson() {
       <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-8">
         {/* Header */}
         <div className="py-8 sm:py-12 flex items-center justify-between border-b border-white/5">
-          <img src="/images/logo-fyre.png" alt="FYRE" className="h-5 sm:h-6 w-auto opacity-50" />
+          <img src="/images/logo-fyre.svg" alt="FYRE" className="h-6 sm:h-7 w-auto" />
           <span className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/20">Proposta Exclusiva</span>
         </div>
 
@@ -366,7 +366,7 @@ export default function PropostaDrAnderson() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
             <a
-              href="https://wa.me/5511999999999?text=Quero%20comecar%20com%20o%20ClinPro%20-%20Proposta%20Dr.%20Anderson"
+              href="https://pay.hub.la/ewfv2hqeldBdrfAtRX0W"
               target="_blank"
               rel="noopener noreferrer"
               className="cta-button"
@@ -476,7 +476,7 @@ export default function PropostaDrAnderson() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <a
-                href="https://wa.me/5511999999999?text=Quero%20comecar%20com%20o%20ClinPro%20-%20Proposta%20Dr.%20Anderson"
+                href="https://pay.hub.la/ewfv2hqeldBdrfAtRX0W"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cta-button"
@@ -518,32 +518,6 @@ export default function PropostaDrAnderson() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Founders */}
-        <div className="py-14 sm:py-20 border-b border-white/5 reveal">
-          <div className="text-center">
-            <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-white/25 block mb-6">Quem esta por tras</span>
-            <div className="flex justify-center gap-6 sm:gap-10 mb-6">
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-white/10 mx-auto mb-3">
-                  <img src="/images/juan.png" alt="Juan Mansilha" className="w-full h-full object-cover" />
-                </div>
-                <p className="text-xs font-semibold text-white">Juan Mansilha</p>
-                <p className="text-[9px] text-white/30">CEO & CTO</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-white/10 mx-auto mb-3">
-                  <img src="/images/rodrigo.png" alt="Rodrigo Mansilha" className="w-full h-full object-cover" />
-                </div>
-                <p className="text-xs font-semibold text-white">Rodrigo Mansilha</p>
-                <p className="text-[9px] text-white/30">Head de Estrategia</p>
-              </div>
-            </div>
-            <p className="text-xs font-light text-white/30 max-w-md mx-auto leading-relaxed italic">
-              &ldquo;Cada agente que construimos carrega a inteligencia de quem ja escalou dezenas de negocios. Nao e so tecnologia, e estrategia aplicada.&rdquo;
-            </p>
           </div>
         </div>
 
@@ -715,7 +689,7 @@ export default function PropostaDrAnderson() {
 
         {/* Footer */}
         <div className="py-10 text-center">
-          <img src="/images/logo-fyre.png" alt="FYRE" className="h-4 w-auto opacity-20 mx-auto mb-4" />
+          <img src="/images/logo-fyre.svg" alt="FYRE" className="h-5 w-auto opacity-30 mx-auto mb-4" />
           <p className="text-[9px] text-white/15 tracking-[0.2em] uppercase">
             FYRE Automacao & I.A — Construindo sistemas inteligentes para escalar negocios
           </p>
